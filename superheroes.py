@@ -23,6 +23,8 @@ class Hero:
         self.abilities = []
         self.armors = []
         self.name = name
+        self.kills = 0
+        self.deaths = 0
         self.starting_health = starting_health
         self.current_health = starting_health
 
@@ -30,6 +32,10 @@ class Hero:
         self.abilities.append(ability)
     def add_armor(self, armor):
         self.armors.append(armor)
+    def add_kill(self, num_kills):
+        self.kills += num_kills
+    def add_deaths(self, num_deaths):
+        self.deaths+=num_deaths
     def attack(self):
         total_damage=0
         for ability in self.abilities:
@@ -50,10 +56,16 @@ class Hero:
         while (self.is_alive() == True and opponent.is_alive() == True):
             opponent.take_damage(self.attack())
             self.take_damage(opponent.attack())
-            if opponent.is_alive() == False:
-                print("Winner is " + self.name)
+            if opponent.is_alive() == False: #if opponent loses
+                self.add_kill(1)
+                opponent.add_deaths(1)
+                print("Winner is: ", self.name)
+            else: #if opponent wins
+                self.add_deaths(1)
+                opponent.add_kill(1)
+                print("Winner is: ", opponent.name)
 
-class Team():
+class Team(Hero):
     def __init__(self, name):
         self.name = name
         self.heroes = []
@@ -67,6 +79,12 @@ class Team():
     def view_all_heroes(self):
         for hero in self.heroes:
             print(hero.name)
+    def attack(self, other_team):
+        pass
+    def revive_heroes(self, health=100):
+        pass
+    def stats(self):
+        pass
 
 
 if __name__ == "__main__":
