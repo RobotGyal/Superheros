@@ -80,11 +80,15 @@ class Team(Hero):
         for hero in self.heroes:
             print(hero.name)
     def attack(self, other_team):
-        pass
+        hero = random.choice(self.heroes)
+        opponent = random.choice(other_team.heroes)
+        Hero.fight(hero, opponent)
     def revive_heroes(self, health=100):
-        pass
+        Hero.health = 100
     def stats(self):
-        pass
+        print("Here are the current team stats: \n")
+        for hero in self.heroes:
+            print(hero.name, hero.kills, hero.deaths, hero.abilities, hero.armor)
 
 
 if __name__ == "__main__":
