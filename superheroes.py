@@ -31,6 +31,7 @@ class Hero:
     def add_ability(self, ability):
         self.abilities.append(ability)
     def add_armor(self, armor):
+        '''Add armore to self.armor'''
         self.armors.append(armor)
     def add_kill(self, num_kills):
         self.kills += num_kills
@@ -92,6 +93,21 @@ class Team(Hero):
         print("Here are the current team stats: \n")
         for hero in self.heroes:
             print(hero.name, hero.kills, hero.deaths, hero.abilities, hero.armor)
+
+class Arena:
+    def __init__(self):
+        team_one = [] 
+        teame_two = []
+    def create_ability(self):
+        '''Prompt for ability info
+        Return abilities and values from user inputs'''
+        Ability.name = user("Please enter a ability: ")
+        Ability.attack_strength = user("Please enter a attack strength: ")
+        return Ability.name, Ability.attack_strength
+    def create_weapon(self):
+        '''Prompt for weapon info
+        Return weapon and values from user inputs'''
+        
 
 
 if __name__ == "__main__":
