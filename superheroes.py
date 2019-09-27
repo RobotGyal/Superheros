@@ -41,9 +41,9 @@ class Hero:
         for ability in self.abilities:
             total_damage += ability.attack()
         return total_damage
-    def defend(self, damage_amt):
+    def defend(self):
+        total_armor = 0
         for damage_amt in self.armors:
-            total_armor = 0
             total_armor += damage_amt.block()
         return total_armor
     def take_damage(self, damage):
