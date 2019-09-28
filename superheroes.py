@@ -1,4 +1,5 @@
 import random
+import sys
 
 class Ability:
     def __init__(self, name, attack_strength):
@@ -96,8 +97,10 @@ class Team(Hero):
 
 class Arena:
     def __init__(self):
-        team_one = [] 
-        team_two = []
+
+        self.team_one = None
+        self.team_two = None
+
     def create_ability(self):
         '''Prompt for ability info
         Return abilities and values from user inputs'''
@@ -136,22 +139,31 @@ class Arena:
             hero.add_ability(ability)
         else:
             print ("Invalid response")
+    def build_team_one(self):
+        team_one_size = input("How many heros do you want on your first team?")
+        for hero in range(team_one_size):
+            self.create_hero()
+    def build_team_two(self):
+        team_two_size = input("How many heros do you want on your second team?")
+        for hero in range(team_two_size):
+            self.create_hero()
+    def team_battle(self):
+        Team.fight(self.team_one, self.team_two)
+    def show_stats(self):
+        '''Prints team statistics to terminal.'''
+        self.team_one.stats()
+        self.team_two.stats()
+
+        winning_team = self.team_one.attack(self.team_two)
+        print("The winning team is team {}! Congratulations!".format(winning_team))
+
 
 
 
 
 if __name__ == "__main__":
-    hero1 = Hero("Wonder Woman")
-    opponent = Hero("Dumbledore")
-    ability1 = Ability("Super Speed", 300)
-    ability2 = Ability("Super Eyes", 130)
-    ability3 = Ability("Wizard Wand", 80)
-    ability4 = Ability("Wizard Beard", 20)
-    hero1.add_ability(ability1)
-    hero1.add_ability(ability2)
-    opponent.add_ability(ability3)
-    opponent.add_ability(ability4)
-    hero1.fight(opponent)
-
-    weapon1 = Weapon("Sword", 500)
-    weapon1.attack()
+    arena = Arena()
+    arena.build_team_one()
+    arena.build_team_two()
+    arena.team_battle()
+    arena.show_stats()
