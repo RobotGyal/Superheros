@@ -97,17 +97,31 @@ class Team(Hero):
 class Arena:
     def __init__(self):
         team_one = [] 
-        teame_two = []
+        team_two = []
     def create_ability(self):
         '''Prompt for ability info
         Return abilities and values from user inputs'''
-        Ability.name = user("Please enter a ability: ")
-        Ability.attack_strength = user("Please enter a attack strength: ")
+        Ability.name = input("Please enter a ability: ")
+        Ability.attack_strength = input("Please enter a attack strength: ")
         return Ability.name, Ability.attack_strength
     def create_weapon(self):
         '''Prompt for weapon info
         Return weapon and values from user inputs'''
+        Weapon.name = input("Please enter a weapon: ")
+        Weapon.attack_strength = input("Please enter a attack strength: ")
+        return Weapon.name, Weapon.attack_strength
+    def create_armor(self):
+        '''Prompt for Armor info
+        Return armor and values from user inputs'''
+        Armor.name = input("Please enter a armor: ")
+        Armor.max_block = input("Please enter a block strength: ")
+        return Armor.name, Armor.max_block
+    def create_hero(self):
+        '''Pronmpt for hero information
+        return Hero with assosciates values 
+        '''
         
+
 
 
 if __name__ == "__main__":
