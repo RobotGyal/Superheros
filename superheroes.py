@@ -117,10 +117,26 @@ class Arena:
         Armor.max_block = input("Please enter a block strength: ")
         return Armor.name, Armor.max_block
     def create_hero(self):
-        '''Pronmpt for hero information
+        '''Prompt for hero information
         return Hero with assosciates values 
         '''
-        
+        hero_name= input("Time to make a hero!/nPlease pick a name for your hero")
+        health = input("What is your heroes starting health?")
+        hero = Hero(hero_name, health)
+        print("Would you like to add armor, abilities, or weapons to your hero?")
+        user_input = input("/n Enter 'A' for abilities, 'W' for weapons, or 'B' for abilities")
+        if user_input == 'A' or 'a':
+            armor = self.create_armor()
+            hero.add_armor(armor)
+        elif user_input == 'W' or 'w':
+            weapon = self.create_weapon()
+            hero.add_weapon(weapon)
+        elif user_input == 'B' or 'b':
+            ability = self.create_ability()
+            hero.add_ability(ability)
+        else:
+            print ("Invalid response")
+
 
 
 
