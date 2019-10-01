@@ -41,24 +41,30 @@ class Hero:
     def add_weapon(self, weapon):
         '''Add weapon to self.abilities'''
         self.abilities.append(weapon)
+
     def attack(self):
         total_damage=0
         for ability in self.abilities:
             total_damage += ability.attack()
         return total_damage
+
     def defend(self, damage_amt=0):
         total_armor = 0
         for damage_amt in self.armors:
             total_armor += damage_amt.block()
         return total_armor
+
     def take_damage(self, damage):
         self.current_health -= damage
+
     def is_alive(self):
-        if self.current_health > 0:
-            return  True
-        return False
+        if self.current_health <= 0:
+            return False
+        else:
+            return True
+
     def fight(self, opponent):
-        while (self.is_alive() == True and opponent.is_alive() == True):
+        while self.is_alive() == True and opponent.is_alive() == True:
             opponent.take_damage(self.attack())
             self.take_damage(opponent.attack())
             if opponent.is_alive() == False: #if opponent loses
@@ -74,6 +80,8 @@ class Team(Hero):
     def __init__(self, name):
         self.name = name
         self.heroes = []
+        self.alive = []
+
     def add_hero(self, hero):
         self.heroes.append(hero)
     def remove_hero(self, name):
@@ -84,10 +92,16 @@ class Team(Hero):
     def view_all_heroes(self):
         for hero in self.heroes:
             print(hero.name)
+
+    def remaining_alive(self):
+        for hero in self.heroes:
+            if hero.is_alive():
+                alive.append(hero)
+        return alive
     def attack(self, other_team):
-        hero = random.choice(self.heroes)
-        opponent = random.choice(other_team.heroes)
-        Hero.fight(hero, opponent)
+        hero = random.choice(self.remaining_alive())
+        opponent = random.choice(other_team.remaining_alive())
+        return hero.fight(opponent)
     def revive_heroes(self, health=100):
         for hero in self.heroes:
             hero.current_health = hero.starting_health
@@ -96,19 +110,14 @@ class Team(Hero):
         for hero in self.heroes:
             print("Hero: ", hero.name)
             print("Number of kills: ", str(hero.kills))
-            print ("Number of deaths: ", hero.deaths)
-    def remaining_alive(self):
-        alive = []
-        for hero in self.heroes:
-            if hero.is_alive:
-                alive.append(hero)
-        return alive
+            print ("Number of deaths: ", str(hero.deaths))
 
 class Arena:
     def __init__(self):
 
         self.team_one = None
         self.team_two = None
+        self.winning_team = None
 
     def create_ability(self):
         '''Prompt for ability info
@@ -116,90 +125,102 @@ class Arena:
         Ability.name = input("Please enter a ability: ")
         Ability.attack_strength = input("Please enter a attack strength: ")
         return Ability.name, Ability.attack_strength
+
     def create_weapon(self):
         '''Prompt for weapon info
         Return weapon and values from user inputs'''
         Weapon.name = input("Please enter a weapon: ")
         Weapon.attack_strength = input("Please enter a attack strength: ")
         return Weapon.name, Weapon.attack_strength
+
     def create_armor(self):
         '''Prompt for Armor info
         Return armor and values from user inputs'''
         Armor.name = input("Please enter a armor: ")
         Armor.max_block = input("Please enter a block strength: ")
         return Armor.name, Armor.max_block
+
     def create_hero(self):
         '''Prompt for hero information
         return Hero with assosciates values 
         '''
-        hero_name= input("Please pick a name for your hero  ")
-        health = input("What is your heroes starting health?  ")
-        hero = Hero(hero_name, health)
-        
-        armor_option = input("Would you like to add an armor?: (Y/N)  ")
-        while armor_option == 'yes' or 'Y' or 'y':
-            armor = self.create_armor()
-            hero.add_armor(armor)
-            armor_option = input("Would you like to add another?: (Y/N) ")
-            if armor_option == 'yes' or 'y' or 'Y':
-                return True
-            elif armor_option == 'no' or 'n' or 'N':
-                armor_option = False
-                continue
-            else:
-                continue
-        ability_option = input("Would you like to add an ability?: (Y/N)  ")
-        while ability_option == 'yes' or 'y' or 'Y':
-            adding_ability = True
-            while adding_ability:
+        hero_name= input("\nPlease pick a name for your hero  ")
+        starting_health = input("What is your heroes starting health?  ")
+        hero = Hero(hero_name, starting_health)
+
+        adding = True
+        while adding:
+            option = input("Would you like to add: armor(A), ability(B), weapon(W), or Finished(F) ")
+            if option.lower() == 'a':
+                armor = self.create_armor()
+                hero.add_armor(armor)
+            elif option.lower() == 'b':
                 ability = self.create_ability()
                 hero.add_ability(ability)
-                another_ability = input("Would you like to add another?: (Y/N) ")
-                if another_ability == 'yes' or 'y' or 'Y':
-                    return True
-                elif another_ability == 'no' or 'n' or 'N':
-                    adding_ability == False
-        weapon_option = input("Would you like to add weapons? (Y/N)  ")
-        while weapon_option == 'Yes' or 'y' or 'Y':
-            adding_weapon = True
-            while adding_weapon:
+            elif option.lower() == 'w':
                 weapon = self.create_weapon()
                 hero.add_weapon(weapon)
-                another_weapon = input("Would you like to add another?: (Y/N) ")
-                if another_weapon == 'yes' or 'y' or 'Y':
-                    return True
-                elif another_weapon == 'no' or 'n' or 'N':
-                    break
-                else:
-                    break
-
-
+            elif option.lower() == 'f':
+                adding = False
+            else:
+                print("Invalid response")
+        return hero
+    def attack(self):
+        pass
     def build_team_one(self):
+        name = input("\nWhat is the name of Team 1? ")
+        self.team_one=Team(name)
         team_one_size = input("How many heros do you want on your first team?  ")
         for hero in range(int(team_one_size)):
             self.create_hero()
             self.team_one.add_hero(hero)
     def build_team_two(self):
+        name = input("\nWhat is the name of Team 2? ")
+        self.team_two=Team(name)
         team_two_size = input("How many heros do you want on your second team?  ")
         for hero in range(int(team_two_size)):
             self.create_hero()
             self.team_two.add_hero(hero)
     def team_battle(self):
-        Team.fight(self.team_one, self.team_two)
+        self.team_one.attack(self.team_two)
+
     def show_stats(self):
         '''Prints team statistics to terminal.'''
         self.team_one.stats()
         self.team_two.stats()
 
-        winning_team = self.team_one.attack(self.team_two)
-        print("The winning team is team {}! Congratulations!".format(winning_team))
-
+        if len(self.team_one.remaining_alive())>0 and len(self.team_two.remaining_alive()) == 0:
+            self.winning_team = self.team_one
+            print("The winning team is team {}! Congratulations!".format(self.winning_team))
+            return self.winning_team
+        else:
+            self.winning_team = self.team_two
+            print("The winning team is team {}! Congratulations!".format(self.winning_team))
+            return self.winning_team
 
 
 
 if __name__ == "__main__":
+    game_is_running = True
+
+    # Instantiate Game Arena
     arena = Arena()
+
+    #Build Teams
     arena.build_team_one()
     arena.build_team_two()
-    arena.team_battle()
-    arena.show_stats()
+
+    while game_is_running:
+
+        arena.team_battle()
+        arena.show_stats()
+        play_again = input("Play Again? Y or N: ")
+
+        #Check for Player Input
+        if play_again.lower() == "n":
+            game_is_running = False
+
+        else:
+            #Revive heroes to play again
+            arena.team_one.revive_heroes()
+            arena.team_two.revive_heroes()
